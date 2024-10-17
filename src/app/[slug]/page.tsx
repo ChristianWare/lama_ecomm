@@ -1,3 +1,5 @@
+import Add from "@/components/Add";
+import CustomizeProducts from "@/components/CustomizeProducts";
 import ProductImages from "@/components/ProductImages";
 
 const SingleProductPage = () => {
@@ -18,8 +20,11 @@ const SingleProductPage = () => {
           Beatae, reprehenderit.
         </p>
         <br />
-        <h2>$59</h2>
-        <h3>$49</h3>
+        <h2 className='line-through'>$59</h2>
+        <h3 className='font-medium text-2xl'>$49</h3>
+        <br />
+        <CustomizeProducts />
+        <Add />
       </div>
     </div>
   );
