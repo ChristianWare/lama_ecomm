@@ -25,23 +25,34 @@ const CartModal = () => {
               <div className='flex items-center justify-between gap-8'>
                 <h3 className='font-semibold'>Product Name</h3>
                 <div className='p-1 bg-gray-50 rounded-sm flex items-center gap-2'>
-                  <div className='text-xs text-green-500'>item.quantity</div>
-                  $price
+                  <div className='text-xs text-green-500'>2</div>
+                  $30
                 </div>
               </div>
               {/* DESC */}
               <div className='text-sm text-gray-500'>avaialbility</div>
             </div>
             {/* BOTTOM */}
-            <div className='flex justify-between text-sm'>
-              <span className='text-gray-500'>Qty.</span>
-              <span
-                className='text-blue-500'
-                // style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
-                // onClick={() => removeItem(wixClient, item._id!)}
-              >
-                Remove
-              </span>
+            <div className=''>
+              <div className='flex items-center justify-between font-semibold'>
+                <span className=''>Subtotal</span>
+                <span className=''>$35</span>
+              </div>
+              <p className='text-gray-500 text-sm mt-2 mb-4'>
+                Shipping and taxes calculated at checkout.
+              </p>
+              <div className='flex justify-between text-sm'>
+                <button className='rounded-md py-3 px-4 ring-1 ring-gray-300'>
+                  View Cart
+                </button>
+                <button
+                  className='rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75'
+                  // disabled={isLoading}
+                  // onClick={handleCheckout}
+                >
+                  Checkout
+                </button>
+              </div>
             </div>
           </div>
         </>
