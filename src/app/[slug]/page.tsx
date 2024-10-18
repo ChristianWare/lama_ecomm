@@ -23,8 +23,36 @@ const SingleProductPage = () => {
         <h2 className='line-through'>$59</h2>
         <h3 className='font-medium text-2xl'>$49</h3>
         <br />
-        <CustomizeProducts />
-        <Add />
+        options here
+        <br />
+        {/* <CustomizeProducts /> */}
+        quantity + add to cart button here
+        {/* <Add /> */}
+        <br />
+        <h4>Title</h4>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
+          perspiciatis natus et impedit pariatur, rerum nulla tenetur
+          accusantium obcaecati repellendus praesentium harum reiciendis dolores
+          eaque optio fuga commodi beatae officia!
+        </p>
+        <br />
+        <h4>Title</h4>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
+          perspiciatis natus et impedit pariatur, rerum nulla tenetur
+          accusantium obcaecati repellendus praesentium harum reiciendis dolores
+          eaque optio fuga commodi beatae officia!
+        </p>
+        <br />
+        <h4>Title</h4>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
+          perspiciatis natus et impedit pariatur, rerum nulla tenetur
+          accusantium obcaecati repellendus praesentium harum reiciendis dolores
+          eaque optio fuga commodi beatae officia!
+        </p>
+        <br />
       </div>
     </div>
   );
