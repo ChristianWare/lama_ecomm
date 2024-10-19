@@ -1,18 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Filter from "@/components/Filter";
 import ProductList from "@/components/ProductList";
+// import Skeleton from "@/components/Skeleton";
 import { wixClientServer } from "@/lib/wixClientServer";
 import Image from "next/image";
 import { Suspense } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ListPage = async ({ searchParams }: { searchParams: any }) => {
   const wixClient = await wixClientServer();
 
   const cat = await wixClient.collections.getCollectionBySlug(
     searchParams.cat || "all-products"
   );
-
-
 
   return (
     <div className='px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative'>
@@ -35,10 +34,9 @@ const ListPage = async ({ searchParams }: { searchParams: any }) => {
       <Filter />
       {/* PRODUCTS */}
       <h1 className='mt-12 text-xl font-semibold'>
-        For You!
-        {/* {cat?.collection?.name} For You! */}
+        {cat?.collection?.name} For You!
       </h1>
-      <Suspense fallback="loading">
+      <Suspense fallback='loading'>
         <ProductList
           categoryId={
             cat.collection?._id || "00000000-000000-000000-000000000001"
@@ -46,8 +44,8 @@ const ListPage = async ({ searchParams }: { searchParams: any }) => {
           searchParams={searchParams}
         />
       </Suspense>
-      
     </div>
   );
 };
+
 export default ListPage;

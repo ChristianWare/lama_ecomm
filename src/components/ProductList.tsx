@@ -1,36 +1,78 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { wixClientServer } from "@/lib/wixClientServer";
 import { products } from "@wix/stores";
-import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 import Link from "next/link";
+import DOMPurify from "isomorphic-dompurify";
+// import Pagination from "./Pagination";
 
-const PRODUCT_PER_PAGE = 20;
+const PRODUCT_PER_PAGE = 8;
 
 const ProductList = async ({
   categoryId,
   limit,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   searchParams,
 }: {
   categoryId: string;
   limit?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   searchParams?: any;
 }) => {
-  
   const wixClient = await wixClientServer();
 
-  const res = await wixClient.products
+  const productQuery = wixClient.products
     .queryProducts()
+    .startsWith("name", searchParams?.name || "")
     .eq("collectionIds", categoryId)
+    .hasSome(
+      "productType",
+      searchParams?.type ? [searchParams.type] : ["physical", "digital"]
+    )
+    .gt("priceData.price", searchParams?.min || 0)
+    .lt("priceData.price", searchParams?.max || 999999)
     .limit(limit || PRODUCT_PER_PAGE)
-    .find();
+    .skip(
+      searchParams?.page
+        ? parseInt(searchParams.page) * (limit || PRODUCT_PER_PAGE)
+        : 0
+    );
+
+  // Fetch the products
+  const res = await productQuery.find();
+
+  // Manually sort the products based on the searchParams.sort
+  if (searchParams?.sort) {
+    const [sortType, sortBy] = searchParams.sort.split(" ");
+
+    if (sortBy === "price") {
+      // Sort products by price
+      res.items.sort((a: any, b: any) => {
+        if (sortType === "asc") {
+          return a.priceData.price - b.priceData.price;
+        } else if (sortType === "desc") {
+          return b.priceData.price - a.priceData.price;
+        }
+        return 0; // Fallback in case sortType is not recognized
+      });
+    } else if (sortBy === "lastUpdated") {
+      // Sort products by lastUpdated
+      res.items.sort((a: any, b: any) => {
+        const dateA = new Date(a.lastUpdated);
+        const dateB = new Date(b.lastUpdated);
+        if (sortType === "asc") {
+          return dateA.getTime() - dateB.getTime();
+        } else if (sortType === "desc") {
+          return dateB.getTime() - dateA.getTime();
+        }
+        return 0; // Fallback
+      });
+    }
+  }
 
   return (
     <div className='mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap'>
       {res.items.map((product: products.Product) => (
         <Link
-          href={`/${product.slug}`}
+          href={"/" + product.slug}
           className='w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]'
           key={product._id}
         >
@@ -41,7 +83,7 @@ const ProductList = async ({
               fill
               sizes='25vw'
               className='absolute object-cover rounded-md z-10 hover:opacity-0 transition-opacity easy duration-500'
-            />{" "}
+            />
             {product.media?.items && (
               <Image
                 src={product.media?.items[1]?.image?.url || "/product.png"}
@@ -54,7 +96,7 @@ const ProductList = async ({
           </div>
           <div className='flex justify-between'>
             <span className='font-medium'>{product.name}</span>
-            <span className='font-semibold'>${product.priceData?.price}</span>
+            <span className='font-semibold'>${product.price?.price}</span>
           </div>
           {product.additionalInfoSections && (
             <div
@@ -62,7 +104,6 @@ const ProductList = async ({
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(
                   product.additionalInfoSections.find(
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     (section: any) => section.title === "shortDesc"
                   )?.description || ""
                 ),
@@ -74,7 +115,9 @@ const ProductList = async ({
           </button>
         </Link>
       ))}
+      {/* Pagination can go here if needed */}
     </div>
   );
 };
+
 export default ProductList;
