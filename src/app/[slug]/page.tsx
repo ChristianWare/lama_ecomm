@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Add from "@/components/Add";
 import CustomizeProducts from "@/components/CustomizeProducts";
 import ProductImages from "@/components/ProductImages";
